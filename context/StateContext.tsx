@@ -2,17 +2,18 @@ import React, { createContext, useContext, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface ContextInterface {
-    cartItems: any;
-    setShowCart: any
-    totalPrice: any;
-    totalQuantities: any;
-    qty: any;
-    incQty: any;
-    decQty: any;
-    onAdd: any;
-    showCart: boolean;
+  cartItems: any;
+  setShowCart: any
+  totalPrice: number;
+  totalQuantities: number;
+  qty: number;
+  incQty: () => void;
+  decQty: () => void;
+  onAdd: (product: any, quantity: any) => void;
+  showCart: boolean;
+  toggleCartItemQuantity: (id: string, value: string) => void;
+  onRemove: (product: any) => void;
 }
-
 
 const AppContext = createContext({} as ContextInterface);
 
@@ -22,6 +23,10 @@ export const AppContextProvider = ({ children }: any) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantities, setTotalQuantities] = useState(0);
   const [qty, setQty] = useState(1);
+
+  let foundProduct;
+  let index;
+
   const onAdd = (product: any, quantity: any) => {
     const checkProductInCart = cartItems.find((item) => item._id === product._id);
 
@@ -44,6 +49,35 @@ export const AppContextProvider = ({ children }: any) => {
     }
     toast.success(`${qty} ${product.name} added to the cart.`);
   }
+
+  const onRemove = (product) => {
+    foundProduct = cartItems.find((item) => item._id === product._id);
+    const newCartItems = cartItems.filter((item) => item._id !== product._id);
+
+    console.log(foundProduct)
+    setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price * foundProduct.quantity);
+    setTotalQuantities(prevTotalQuantities => prevTotalQuantities - foundProduct.quantity);
+    setCartItems(newCartItems);
+  }
+
+  const toggleCartItemQuantity = (id: string, value: string) => {
+    foundProduct = cartItems.find((item) => item._id === id );
+    index = cartItems.findIndex((product) => product._id === id);
+    const newCartItems = cartItems.filter((item) => item._id !== id);
+
+    if(value === 'inc') {
+      setCartItems([...newCartItems, { ...foundProduct, quantity: foundProduct.quantity + 1  }]);
+      setTotalPrice((prevTotalPrice) => prevTotalPrice + foundProduct.price);
+      setTotalQuantities(prevTotalQuantities => prevTotalQuantities + 1);
+    } else if (value === 'dec') {
+      if(foundProduct.quantity) {
+        setCartItems([...newCartItems, { ...foundProduct, quantity: foundProduct.quantity - 1  }]);
+        setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price);
+        setTotalQuantities(prevTotalQuantities => prevTotalQuantities - 1);
+      }
+    }
+  }
+
   const incQty = () => {
     setQty((prevQty) => prevQty + 1);
   };
@@ -65,7 +99,9 @@ export const AppContextProvider = ({ children }: any) => {
         qty,
         incQty,
         decQty,
-        onAdd
+        onAdd,
+        toggleCartItemQuantity,
+        onRemove
       }}
     >
       {children}
