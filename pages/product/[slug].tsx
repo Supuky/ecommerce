@@ -21,6 +21,7 @@ const ProductDetail = ( {products, product}: any ) => {
                             <img 
                              src={urlFor(item).toString()}
                              alt={name}
+                             key={i}
                              className={i === index ? 'small-image selected-image' : 'small-image'}
                              onMouseEnter={() => setIndex(i)}
                             />
