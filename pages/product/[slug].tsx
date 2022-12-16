@@ -7,7 +7,13 @@ import { client, urlFor } from "../../lib/client";
 const ProductDetail = ( {products, product}: any ) => {
     const { image, name, details, price } = product;
     const [index, setIndex] = useState(0);
-    const { decQty, incQty, qty, onAdd } = useAppContext()
+    const { decQty, incQty, qty, onAdd, setShowCart } = useAppContext();
+
+    const handleBuyNow = () => {
+        onAdd(product, qty);
+    
+        setShowCart(true);
+    }
 
     return (
         <div>
@@ -62,7 +68,7 @@ const ProductDetail = ( {products, product}: any ) => {
                         <button type="button" className="add-to-cart" onClick={() => onAdd(product, qty)}>
                             Add to Cart
                         </button>
-                        <button type="button" className="buy-now">
+                        <button type="button" className="buy-now" onClick={handleBuyNow}>
                             Buy Now
                         </button>
                     </div>

@@ -13,6 +13,9 @@ interface ContextInterface {
   showCart: boolean;
   toggleCartItemQuantity: (id: string, value: string) => void;
   onRemove: (product: any) => void;
+  setCartItems: any;
+  setTotalPrice: any;
+  setTotalQuantities: any;
 }
 
 const AppContext = createContext({} as ContextInterface);
@@ -101,7 +104,10 @@ export const AppContextProvider = ({ children }: any) => {
         decQty,
         onAdd,
         toggleCartItemQuantity,
-        onRemove
+        onRemove,
+        setCartItems,
+        setTotalPrice,
+        setTotalQuantities,
       }}
     >
       {children}
