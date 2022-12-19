@@ -6,6 +6,17 @@ import { client, urlFor } from "../../lib/client";
 
 const ProductDetail = ( {products, product}: any ) => {
     const { image, name, details, price } = product;
+    const priceStr = price.toString()
+    let customPrice;
+    if(priceStr.length === 3) {
+        const frontPrice = priceStr.slice(0, 2);
+        const backPrice = priceStr.slice(2);
+        customPrice = `${frontPrice},${backPrice}`;
+    } else {
+        const frontPrice = priceStr.slice(0, 1);
+        const backPrice = priceStr.slice(1);
+        customPrice = `${frontPrice},${backPrice}`;
+    }
     const [index, setIndex] = useState(0);
     const { decQty, incQty, qty, onAdd, setShowCart } = useAppContext();
 
@@ -47,11 +58,11 @@ const ProductDetail = ( {products, product}: any ) => {
                         </div>
                     </div>
                     <p>(20)</p>
-                    <h4>Details: </h4>
+                    <h4>特徴: </h4>
                     <p>{details}</p>
-                    <p className="price">${price}</p>
+                    <p className="price">{priceStr.length > 2 ? `${customPrice}00円` : `${customPrice}00円`}</p>
                     <div className="quantity">
-                        <h3>Quantity</h3>
+                        <h3>数量</h3>
                         <p className="quantity-desc">
                             <span className="minus" onClick={decQty} >
                                 <AiOutlineMinus />
@@ -66,17 +77,17 @@ const ProductDetail = ( {products, product}: any ) => {
                     </div>
                     <div className="buttons">
                         <button type="button" className="add-to-cart" onClick={() => onAdd(product, qty)}>
-                            Add to Cart
+                            カートに入れる
                         </button>
                         <button type="button" className="buy-now" onClick={handleBuyNow}>
-                            Buy Now
+                            今すぐ購入
                         </button>
                     </div>
                 </div>
             </div>
 
             <div className="maylike-products-wrapper">
-                <h2>You may also like</h2>
+                <h2>おすすめの商品</h2>
                 <div className="marquee">
                     <div className="maylike-products-container track">
                         {products.map((item: any) => (

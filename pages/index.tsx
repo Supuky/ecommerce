@@ -24,8 +24,8 @@ const Home = ({ products, bannerData }: any) => {
       <HeroBanner heroBanner={bannerData.length && bannerData[0]} />
 
       <div className='products-heading '>
-        <h2>Beset Selling Products</h2>
-        <p>Speaker of many variations</p>
+        <h2>ベストセラー商品</h2>
+        <p>最高の音質をあなたに</p>
       </div>
 
       <div className='products-container'>

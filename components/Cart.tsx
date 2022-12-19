@@ -27,7 +27,7 @@ const Cart = () => {
     
     const data = await response.json();
 
-    toast.loading('Redirecting...');
+    toast.loading('リダイレクト中...');
 
     stripe.redirectToCheckout({ sessionId: data.id });
   }
@@ -42,20 +42,20 @@ const Cart = () => {
         >
           <AiOutlineLeft />
           <span className='heading'></span>
-          <span className='cart-num-items'>({totalQuantities} items)</span>
+          <span className='cart-num-items'>({totalQuantities}個の商品)</span>
         </button>
 
         {cartItems.length < 1 && (
           <div className="empty-cart">
             <AiOutlineShopping size={150}/>
-            <h3>Your shopping bag is empty</h3>
+            <h3>カートが空です</h3>
             <Link href='/'>
               <button
                 type='button'
                 onClick={() => setShowCart(false)}
                 className="btn"
               >
-                Continue Shopping 
+                ショッピングを続ける
               </button>
             </Link>
           </div>
@@ -67,8 +67,10 @@ const Cart = () => {
               className="cart-product-image"/>
               <div className="item-desc">
                 <div className="flex top">
-                  <h5>{item.name}</h5>
-                  <h4>${item.price}</h4>
+                  <div>
+                    <h5>{item.name}</h5>
+                    <h4>{`${item.price}00円`}</h4>
+                  </div>
                   <div className="flex bottom">
                     <div className="">
                     <p className="quantity-desc">
@@ -99,8 +101,8 @@ const Cart = () => {
         {cartItems.length >= 1 && (
           <div className="cart-bottom">
             <div className="total">
-              <h3>Subtotal:</h3>
-              <h3>${totalPrice}</h3>
+              <h3>合計金額</h3>
+              <h3>{`${totalPrice}00円`}</h3>
             </div>
             <div className="btn-container">
               <button
@@ -108,7 +110,7 @@ const Cart = () => {
                 className='btn'
                 onClick={handleCheckout}
               >
-                Pay with Stripe
+                カード決済
               </button>
             </div>
           </div>
